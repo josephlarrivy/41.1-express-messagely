@@ -6,15 +6,26 @@
 
 class User {
 
-  /** register new user -- returns
-   *    {username, password, first_name, last_name, phone}
-   */
-
-  static async register({username, password, first_name, last_name, phone}) { }
+  static async register({username, password, first_name, last_name, phone}) {
+    let hashedPwd = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
+    let now = getUTCDate();
+    const result = await db.query(
+      `INSERT INTO users (
+              username, password,
+              first_name, last_name, phone,
+              join_at, last_login_at)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING username, password, first_name, last_name, phone`,
+      [username, hashedPwd, first_name, last_name, phone, now, now]
+    );
+    return result.rows[0];
+  }
 
   /** Authenticate: is this username/password valid? Returns boolean. */
 
-  static async authenticate(username, password) { }
+  static async authenticate(username, password) {
+    
+  }
 
   /** Update last_login_at for user */
 
