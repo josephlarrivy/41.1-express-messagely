@@ -23,7 +23,13 @@ const db = require("../db");
  * Make sure that the currently-logged-in users is either the to or from user.
  *
  **/
-
+router.get('/', async function (req, res, next) {
+    try {
+        
+    } catch (e) {
+        return next(e);
+    }
+});
 
 /** POST / - post message.
  *
