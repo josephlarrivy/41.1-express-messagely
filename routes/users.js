@@ -46,7 +46,7 @@ router.get('/:username', ensureCorrectUser, async (req, res, next) => {
 router.get('/:username/to', ensureCorrectUser, async (req, res, next) => {
     let username = req.params.username;
     try {
-        let res = await Message.get(usernmae)
+        let res = await Message.get(username)
         return res.json({res})
     } catch (e) {
         return next(e);
