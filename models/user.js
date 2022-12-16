@@ -1,11 +1,14 @@
+const db = require("../db");
+const bcrypt = require("bcrypt");
+const ExpressError = require("../expressError");
+
+const { BCRYPT_WORK_FACTOR } = require("../config");
 /** User class for message.ly */
 
 
 
 /** User of the site. */
-
 class User {
-
   static async register({username, password, first_name, last_name, phone}) {
     let hashedPwd = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
     let now = getUTCDate();
@@ -21,11 +24,18 @@ class User {
     return result.rows[0];
   }
 
-  /** Authenticate: is this username/password valid? Returns boolean. */
-
   static async authenticate(username, password) {
-    
-  }
+    const result = await db.query(
+      `SELECT password FROM users WHERE username = $1`,
+      [username]);
+    const user = result.rows[0];
+
+    if (user) {
+      if (await bcrypt.compare(password, user.password) === true) {
+        return res.json({ message: "Logged in!" });
+      }
+    }
+  };
 
   /** Update last_login_at for user */
 

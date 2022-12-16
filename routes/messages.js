@@ -1,4 +1,6 @@
-const Router = require("express").Router;
+const express = require("express");
+
+const Router = express.Router;
 const router = new Router();
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
